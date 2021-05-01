@@ -1,6 +1,7 @@
 import pyttsx3
 import datetime
-import speechRecognition as sr
+import speech_recognition as sr
+import wikipedia
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -27,9 +28,9 @@ def wish_me():
 
 def takeCommand():
     r = sr.Recognizer()
-    with sr.Microphone as source:
+    with sr.Microphone() as source:
         print('Listening..')
-        r.pause_threshold = 1
+        r.pause_threshold = 0.5
         audio = r.listen(source)
 
     try:
@@ -39,7 +40,19 @@ def takeCommand():
 
     except Exception as e:
         print('Please speak again!')
-        return 'None'                           
+        return 'None'
+    return query                               
 
 if __name__ == '__main__':
-    wish_me()    
+    wish_me()
+
+    while True:
+        query = takeCommand().lower()   
+
+        if 'wikipedia' in query:
+            speak('Searching Wikipedia..')
+            query = query.replace("wikipedia", "")
+            results = wikipedia.summary(query, sentences=2)
+            speak("According to wikipedia")
+            print(results)
+            speak(results) 
