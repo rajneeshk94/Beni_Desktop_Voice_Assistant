@@ -3,6 +3,7 @@ import datetime
 import speech_recognition as sr
 import wikipedia
 import webbrowser
+import pywhatkit
 
 webbrowser.register('chrome',
     None,
@@ -45,7 +46,7 @@ def takeCommand():
         print(f'You said: {query}\n') 
 
     except Exception as e:
-        speak('Please speak again!')
+        print('Please speak again!')
         return 'None'
     return query                               
 
@@ -72,4 +73,19 @@ if __name__ == '__main__':
 
         elif 'the time' in query:
             time = datetime.datetime.now().strftime('%I:%M %p')
-            speak(f'Sir, the time is {time}')          
+            speak(f'Sir, the time is {time}')
+
+        elif 'play' in query:
+            song = query.replace('play', '')
+            speak(f'Playing {song}')
+            pywhatkit.playonyt(song)
+
+        elif 'search' in query:
+            search_item = query.replace('search', '')
+            speak(f'Searching {search_item} on Google')
+            pywhatkit.search(search_item)
+            # pywhatkit.text_to_handwriting("I'm just testing if this could really do what I wish to obtain from this module. So ya this is cool!", "C:/Users/user/Desktop/test23.png")
+
+        elif 'goodbye' in query:
+            speak('Goodbye Sir')
+            break
